@@ -1,19 +1,43 @@
+
 package ma.dentalsoft;
 
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.SwingConstants;
-import javax.swing.SwingUtilities;
+import ma.dentalsoft.config.ApplicationContext;
+import ma.dentalsoft.service.PatientService;
+import ma.dentalsoft.ui.controller.PatientController;
+import ma.dentalsoft.ui.view.PatientView;
+
+import javax.swing.*;
 
 public class DentalSoftApplication {
+
     public static void main(String[] args) {
+
         SwingUtilities.invokeLater(() -> {
-            JFrame frame = new JFrame("DentalSoft - YOU SMILE");
-            frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-            frame.add(new JLabel("DentalSoft V1.0", SwingConstants.CENTER));
-            frame.setSize(600, 400);
-            frame.setLocationRelativeTo(null);
-            frame.setVisible(true);
+
+            try {
+                // Initialisation du service
+                PatientService service =
+                        ApplicationContext.getPatientService();
+
+                // Creation de la fenetre
+                PatientView view = new PatientView();
+
+                // Association Controller + View + Service
+                new PatientController(view, service);
+
+                // Affichage
+                view.setVisible(true);
+
+            } catch (Exception e) {
+                e.printStackTrace();
+
+                JOptionPane.showMessageDialog(
+                        null,
+                        "Erreur : " + e.getMessage(),
+                        "DentalSoft",
+                        JOptionPane.ERROR_MESSAGE
+                );
+            }
         });
     }
 }
